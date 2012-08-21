@@ -1,0 +1,13 @@
+0e3f54fddcf0dc5dafdbb25fdb0f475e *DESCRIPTION
+8b54e5a89fbda3af5e077053d40bec76 *NAMESPACE
+2cb40a0db7cb01a95e03aca848f6d0a0 *R/pr.R
+f6d3b3195e5d376dd6b31f888ded368c *data/data1.rda
+89d2f8d8b7f2a9586643d7eeb5e5b695 *data/data2.rda
+30901d959c957b8e60569b34c9ed3732 *data/data3.rda
+0f63e85201e22c0a7571117f323fb213 *data/data4.rda
+8a90e72cd1782b1cb400b930471fc5d5 *man/data1.Rd
+09144230cb56f72b12aa4275658954a4 *man/data2.Rd
+0356ac6b5014d5cde3ede87bcdaee9ae *man/data3.Rd
+08bf0ae8da5346de3c51cfb7e50e9ff8 *man/data4.Rd
+b1f3f2a0388eac9a57e9a6d0cb096608 *man/epr-package.Rd
+602572cee6ddcde16a1557d9308e2e50 *man/pr.Rd
