@@ -1,8 +1,22 @@
-pr <-
-function(data){
-    data11=data
-    u<-list("",
-            
+pr2 <-
+function(data, design=1, list=FALSE, type=2){
+    list=ifelse(list==FALSE, 1,2)
+    type=ifelse(type==1, 1,2)
+fa11=function(a){
+        a=anova(a); res=a;d=data.frame(res); d=round(d,4); d1=d[,5]; d2=ifelse(d1<0.001, "<0.001", d1); 
+        d2=d2[-length(d2)];d2=c(d2,"-"); d=d[,-5];d=data.frame(d,d2);d[is.na(d)] <- "-"
+        names(d)=c("df", "type I SS", "mean square", "F value", "p>F")
+        return(d)
+    }
+fa22=function(a){
+        a=Anova(a, type=2); res=a; d=data.frame(res); d=data.frame(d[,2],d[,1],d[,1]/d[,2],d[,3],d[,4])
+        d=round(d,4); d1=d[,5]; d2=ifelse(d1<0.001, "<0.001", d1); 
+        d2=d2[-length(d2)];d2=c(d2,"-"); d=d[,-5];d=data.frame(d,d2);d[is.na(d)] <- "-"
+        names(d)=c("df", "type II SS", "mean square", "F value", "p>F"); rownames(d)=rownames(res)
+        return(d)
+    }
+lfun=list(fa11,fa22)
+fa1=lfun[[type]]
             f1=function(data){ 
                 names(data)=c("treatments","response")
                 data=data.frame(treatments=as.numeric(data$treatments), response=data$response, linear=data$treatments, quadratic=data$treatments^2, cubic=data$treatments^3, treatment=factor(data$treatments) )
@@ -19,7 +33,7 @@ function(data){
                 )
                 gg=ifelse(n1==3,2,1)
                 m3=res[[gg]]
-                anova=list(anova(m1),anova(m2),anova(m3))
+                anova=list(fa1(m1),fa1(m2),fa1(m3))
                 names(anova)=c('linear','quadratic','cubic')
                 m11=lm(response~linear, data=data)
                 m12=lm(response~linear+quadratic, data=data)
@@ -59,7 +73,7 @@ function(data){
                 names(rf)=c("Analysis of variance","Models","t test for coefficients","R-squared")
                 return(rf)
             }
-            ,
+            
             f2=function(data){ 
                 names(data)=c("treatments","blocks","response")
                 data=data.frame(treatments=as.numeric(data$treatments), blocks=as.factor(data$blocks), response=data$response, linear=data$treatments, quadratic=data$treatments^2, cubic=data$treatments^3, treatment=factor(data$treatments) )
@@ -76,7 +90,7 @@ function(data){
                 )
                 gg=ifelse(n1==3,2,1)
                 m3=res[[gg]]
-                anova=list(anova(m1),anova(m2),anova(m3))
+                anova=list(fa1(m1),fa1(m2),fa1(m3))
                 names(anova)=c('linear','quadratic','cubic')
                 m11=lm(response~linear, data=data)
                 m12=lm(response~linear+quadratic, data=data)
@@ -115,23 +129,23 @@ function(data){
                 names(rf)=c("Analysis of variance","Models","t test for coefficients","R-squared")
                 return(rf)
             }
-            , f3=function(data){ 
-                names(data)=c("treatments","rows", "cols","response")
-                data=data.frame(treatments=as.numeric(data$treatments), rows=as.factor(data$rows), cols=as.factor(data$cols),  response=data$response, linear=data$treatments, quadratic=data$treatments^2, cubic=data$treatments^3, treatment=factor(data$treatments) )
+             f3=function(data){ 
+                names(data)=c("treatments","rows", "columns","response")
+                data=data.frame(treatments=as.numeric(data$treatments), rows=as.factor(data$rows), columns=as.factor(data$columns),  response=data$response, linear=data$treatments, quadratic=data$treatments^2, cubic=data$treatments^3, treatment=factor(data$treatments) )
                 n1= nlevels(data$treatment)-1
                 lack_of_fit=poly(data$treatments, n1)
-                m1<-lm(response~linear+lack_of_fit+rows+cols,data=data, contrasts=list(rows=contr.sum, cols=contr.sum))
+                m1<-lm(response~linear+lack_of_fit+rows+columns,data=data, contrasts=list(rows=contr.sum, columns=contr.sum))
                 n2= nlevels(data$treatment)-1
                 lack_of_fit=poly(data$treatments, n2)
-                m2<-lm(response~linear+quadratic+lack_of_fit+ rows+cols,data=data, contrasts=list(rows=contr.sum, cols=contr.sum))
+                m2<-lm(response~linear+quadratic+lack_of_fit+ rows+columns,data=data, contrasts=list(rows=contr.sum, columns=contr.sum))
                 res=list(
-                    m3<-lm(response~linear+quadratic+cubic+lack_of_fit+ rows+cols,data=data, contrasts=list(rows=contr.sum, cols=contr.sum))
+                    m3<-lm(response~linear+quadratic+cubic+lack_of_fit+ rows+columns,data=data, contrasts=list(rows=contr.sum, columns=contr.sum))
                     ,
-                    m4<-lm(response~linear+quadratic+cubic+ rows+cols,data=data, contrasts=list(rows=contr.sum, cols=contr.sum))
+                    m4<-lm(response~linear+quadratic+cubic+ rows+columns,data=data, contrasts=list(rows=contr.sum, columns=contr.sum))
                 )
                 gg=ifelse(n1==3,2,1)
                 m3=res[[gg]]
-                anova=list(anova(m1),anova(m2),anova(m3))
+                anova=list(fa1(m1),fa1(m2),fa1(m3))
                 names(anova)=c('linear','quadratic','cubic')
                 m11=lm(response~linear, data=data)
                 m12=lm(response~linear+quadratic, data=data)
@@ -170,24 +184,24 @@ function(data){
                 names(rf)=c("Analysis of variance","Models","t test for coefficients","R-squared")
                 return(rf)
             }
-            ,
+           
             f4=function(data){ 
-                names(data)=c("treatments", "squares","rows", "cols","response")
-                data=data.frame(treatments=as.numeric(data$treatments), rows=as.factor(data$rows), squares=as.factor(data$squares), cols=as.factor(data$cols),  response=data$response, linear=data$treatments, quadratic=data$treatments^2, cubic=data$treatments^3, treatment=factor(data$treatments) )
+                names(data)=c("treatments", "squares","rows", "columns","response")
+                data=data.frame(treatments=as.numeric(data$treatments), rows=as.factor(data$rows), squares=as.factor(data$squares), columns=as.factor(data$columns),  response=data$response, linear=data$treatments, quadratic=data$treatments^2, cubic=data$treatments^3, treatment=factor(data$treatments) )
                 n1= nlevels(data$treatment)-1
                 lack_of_fit=poly(data$treatments, n1)
-                m1<-lm(response~linear+lack_of_fit+squares+rows+cols,data=data, contrasts=list(squares=contr.sum, rows=contr.sum, cols=contr.sum))
+                m1<-lm(response~linear+lack_of_fit+squares+rows+columns,data=data, contrasts=list(squares=contr.sum, rows=contr.sum, columns=contr.sum))
                 n2= nlevels(data$treatment)-1
                 lack_of_fit=poly(data$treatments, n2)
-                m2<-lm(response~linear+quadratic+lack_of_fit+ squares+rows+cols,data=data, contrasts=list(squares=contr.sum,rows=contr.sum, cols=contr.sum))
+                m2<-lm(response~linear+quadratic+lack_of_fit+ squares+rows+columns,data=data, contrasts=list(squares=contr.sum,rows=contr.sum, columns=contr.sum))
                 res=list(
-                    m3<-lm(response~linear+quadratic+cubic+lack_of_fit+ squares+rows+cols,data=data, contrasts=list(squares=contr.sum,rows=contr.sum, cols=contr.sum))
+                    m3<-lm(response~linear+quadratic+cubic+lack_of_fit+ squares+rows+columns,data=data, contrasts=list(squares=contr.sum,rows=contr.sum, columns=contr.sum))
                     ,
-                    m4<-lm(response~linear+quadratic+cubic+ squares+rows+cols,data=data, contrasts=list(squares=contr.sum, rows=contr.sum, cols=contr.sum))
+                    m4<-lm(response~linear+quadratic+cubic+ squares+rows+columns,data=data, contrasts=list(squares=contr.sum, rows=contr.sum, columns=contr.sum))
                 )
                 gg=ifelse(n1==3,2,1)
                 m3=res[[gg]]
-                anova=list(anova(m1),anova(m2),anova(m3))
+                anova=list(fa1(m1),fa1(m2),fa1(m3))
                 names(anova)=c('linear','quadratic','cubic')
                 m11=lm(response~linear, data=data)
                 m12=lm(response~linear+quadratic, data=data)
@@ -226,8 +240,27 @@ function(data){
                 names(rf)=c("Analysis of variance","Models","t test for coefficients","R-squared")
                 return(rf)
             }
-    )
-    
-    g=u[[length(data11)]]
-    g(data)
+      
+de1 = c(1)
+    de2 = c(1, 2)
+    de3 = c(1, 2, 3)
+    de4 = c(1, 2, 3, 4)
+de = list(de1, de2, de3, de4)
+ de = de[[design]]
+    d = as.list(data)
+    d1 = d[de]
+    d2 = d[-de]
+    f = function(h) {
+        data.frame(d1, d2[h])
+    }
+    h = length(d2)
+    h = 1:h
+    l = lapply(h, f)
+    l2 = list(f1, f2, f3, f4)
+    fun = l2[[design]]
+    li1 = lapply(l, fun)
+    names(li1) = names(d2)
+    li = list(fun(data), li1)
+    li = li[[list]]
+    return(li)
 }
