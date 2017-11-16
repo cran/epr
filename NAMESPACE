@@ -1,1 +1,15 @@
-exportPattern("^[[:alpha:]]+")
+importFrom("graphics", "curve", "legend", "plot")
+importFrom("stats", "AIC", "BIC", "anova", "coef", "contr.sum",
+     "deviance", "fitted", "lm", "nls", "nls.control", "poly",
+     "resid", "sd", "var")
+importFrom("grDevices", "dev.new")
+importFrom("graphics", "abline", "axis", "text")
+importFrom("stats", "df.residual", "median", "na.exclude", "pt",
+             "shapiro.test")
+importFrom("utils", "combn")
+
+
+import(lme4)
+import(car)
+
+export(bl, pr1, pr2, r.test, regplot)

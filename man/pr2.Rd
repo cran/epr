@@ -101,12 +101,6 @@ data6=data.frame(treatments,r1,r2,r3, r4)
 # use the argument list = TRUE
 pr2(data6, design=1, list=TRUE)
 
-# graphs
-regplot(data6,variable=1, poly=2)
-regplot(data6,variable=2, poly=1)
-regplot(data6,variable=3, poly=1)
-regplot(data6,variable=4, poly=4)
-regplot(data6,variable=4, poly=3)
 
 }
 

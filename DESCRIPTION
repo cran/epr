@@ -1,14 +1,15 @@
 Package: epr
 Type: Package
-Title: Easy polynomial regression
-Version: 2.0
-Date: 2013-07-30
+Title: Easy Polynomial Regression
+Version: 3.0
+Date: 2017-11-14
 Author: Emmanuel Arnhold
 Maintainer: Emmanuel Arnhold <emmanuelarnhold@yahoo.com.br>
-Description: The package performs analysis of polynomial regression in simple designs with quantitative treatments
-Depends: R (>= 2.13), car
+Description: Performs analysis of polynomial regression in simple designs with quantitative treatments.
+Depends: R (>= 3.0.0)
+Imports: car, lme4
 License: GPL-2
-Packaged: 2013-07-30 18:25:01 UTC; emmanuel
 NeedsCompilation: no
+Packaged: 2017-11-15 09:33:10 UTC; emmanuel
 Repository: CRAN
-Date/Publication: 2013-07-30 21:36:47
+Date/Publication: 2017-11-16 22:15:46 UTC
